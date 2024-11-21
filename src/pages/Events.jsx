@@ -1,7 +1,6 @@
 import { useState, useEffect } from "react";
 import { createApiClient, handleApiError } from "../utils/apiUtils";
 import { formatDate } from "../utils/dateUtils";
-import { saveAs } from "file-saver"; // Import file-saver library
 
 export default function EventsSection() {
   const [events, setEvents] = useState([]);
@@ -39,29 +38,28 @@ export default function EventsSection() {
     setCurrentIndex((prev) => (prev === events.length - 1 ? 0 : prev + 1));
   };
 
-  const handleSaveToCalendar = () => {
+  const handleSaveToGoogleCalendar = () => {
     const currentEvent = events[currentIndex];
-    const eventDetails = `
-BEGIN:VCALENDAR
-VERSION:2.0
-CALSCALE:GREGORIAN
-BEGIN:VEVENT
-SUMMARY:${currentEvent.title}
-DESCRIPTION:${currentEvent.description}
-DTSTART:${new Date(currentEvent.date).toISOString().replace(/[-:]/g, "").split(".")[0]}Z
-DTEND:${new Date(
-      new Date(currentEvent.date).getTime() + 60 * 60 * 1000
-    ) // Adds 1 hour
+    const startDateTime = new Date(currentEvent.date)
       .toISOString()
       .replace(/[-:]/g, "")
-      .split(".")[0]}Z
-LOCATION:${currentEvent.venue}
-END:VEVENT
-END:VCALENDAR
-    `.trim();
+      .split(".")[0] + "Z"; // ISO format for Google Calendar
+    const endDateTime = new Date(
+      new Date(currentEvent.date).getTime() + 60 * 60 * 1000 // Adds 1 hour
+    )
+      .toISOString()
+      .replace(/[-:]/g, "")
+      .split(".")[0] + "Z";
 
-    const blob = new Blob([eventDetails], { type: "text/calendar" });
-    saveAs(blob, `${currentEvent.title.replace(/ /g, "_")}.ics`);
+    const calendarUrl = `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${encodeURIComponent(
+      currentEvent.title
+    )}&details=${encodeURIComponent(
+      currentEvent.description
+    )}&location=${encodeURIComponent(
+      currentEvent.venue
+    )}&dates=${startDateTime}/${endDateTime}`;
+
+    window.open(calendarUrl, "_blank");
   };
 
   if (loading) {
@@ -118,7 +116,7 @@ END:VCALENDAR
             </button>
 
             <button
-              onClick={handleSaveToCalendar}
+              onClick={handleSaveToGoogleCalendar}
               className="inline-block bg-black text-yellow-500 py-2 px-6 rounded-lg font-semibold text-lg md:text-2xl"
             >
               REMIND ME
