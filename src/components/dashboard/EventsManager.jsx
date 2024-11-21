@@ -12,6 +12,7 @@ export default function EventsManager() {
     title: "",
     description: "",
     date: "",
+    venue:"",
     image: null,
   });
   const [editingEvent, setEditingEvent] = useState(null);
@@ -64,6 +65,7 @@ export default function EventsManager() {
         title: formData.title,
         description: formData.description,
         date: formData.date,
+        venue: formData.venue,
         image: formData.image,
       };
 
@@ -86,6 +88,7 @@ export default function EventsManager() {
       title: event.title,
       description: event.description,
       date: formatDateForInput(event.date),
+      venue: event.venue,
       image: event.image,
     });
   };
@@ -106,6 +109,7 @@ export default function EventsManager() {
       title: "",
       description: "",
       date: "",
+      venue: "",
       image: null,
     });
     setEditingEvent(null);
@@ -145,6 +149,19 @@ export default function EventsManager() {
             onChange={(e) => setFormData({ ...formData, date: e.target.value })}
             required
           />
+
+          
+          <input
+            type="text"
+            placeholder="Event Venue"
+            className="bg-gray-800 text-white p-2 rounded"
+            value={formData.venue}
+            onChange={(e) =>
+              setFormData({ ...formData, venue: e.target.value })
+            }
+            required
+          />
+
 
           <textarea
             placeholder="Description"
@@ -218,6 +235,7 @@ export default function EventsManager() {
                 <div>
                   <h4 className="text-white font-bold">{event.title}</h4>
                   <p className="text-gray-400">{formatDate(event.date)}</p>
+                  <p className="text-gray-400">{event.venue}</p>
                   <p className="text-gray-400 mt-1">{event.description}</p>
                 </div>
               </div>
