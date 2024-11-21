@@ -133,7 +133,7 @@ export default function Home() {
 
       <section className="relative py-24">
         <div className="container mx-auto px-4">
-          <h2 className="text-5xl md:text-9xl font-bold mb-16 text-yellow-500 text-center">
+          <h2 className="text-4xl md:text-8xl font-bold mb-10 text-yellow-500">
             MEMBER&apos;S CAR OF THE MONTH
           </h2>
           {carOfTheMonth ? (
