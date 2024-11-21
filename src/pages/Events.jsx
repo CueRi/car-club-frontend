@@ -67,11 +67,11 @@ export default function EventsSection() {
         </h2>
   
         <div className="w-full max-w-3xl mx-auto bg-gray-500 bg-opacity-75 p-6 md:p-8 rounded-lg shadow-md flex flex-col items-center">
-          <div className="relative w-full max-w-[100%] mx-auto aspect-[16/9] mb-4">
+          <div className="relative w-full max-w-sm mx-auto mb-4">
             <img
               src={currentEvent.image}
               alt={currentEvent.title}
-              className="w-full h-full object-cover rounded-lg"
+              className="w-full h-full object-cover rounded-lg aspect-square"
             />
           </div>
   
