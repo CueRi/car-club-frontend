@@ -54,7 +54,7 @@ export default function EventsSection() {
   const currentEvent = events[currentIndex];
 
   return (
-    <section className="relative bg-black text-white py-16 h-auto md:h-screen overflow-hidden">
+    <section className="relative bg-black text-white py-16 min-h-screen flex items-center justify-center overflow-hidden">
       <img
         src="/images/background/events.jpg"
         alt="Events Background"
@@ -66,7 +66,7 @@ export default function EventsSection() {
           LATEST HAPPENINGS
         </h2>
   
-        <div className="w-full max-w-3xl mx-auto bg-gray-500 bg-opacity-75 p-6 md:p-8 rounded-lg shadow-md max-h-[70vh] overflow-auto">
+        <div className="w-full max-w-3xl mx-auto bg-gray-500 bg-opacity-75 p-6 md:p-8 rounded-lg shadow-md flex flex-col items-center">
           <div className="relative w-full max-w-[100%] mx-auto aspect-[16/9] mb-4">
             <img
               src={currentEvent.image}
@@ -75,11 +75,13 @@ export default function EventsSection() {
             />
           </div>
   
-          <h3 className="text-2xl font-semibold mb-2 text-center">{currentEvent.title}</h3>
-          <p className="mb-4 text-center">{currentEvent.description}</p>
-          <p className="text-yellow-500 font-bold text-center">
-            {formatDate(currentEvent.date)}
-          </p>
+          <div className="text-center flex flex-col gap-4">
+            <h3 className="text-2xl font-semibold">{currentEvent.title}</h3>
+            <p>{currentEvent.description}</p>
+            <p className="text-yellow-500 font-bold">
+              {formatDate(currentEvent.date)}
+            </p>
+          </div>
   
           <div className="flex justify-center gap-4 mt-8">
             <button
