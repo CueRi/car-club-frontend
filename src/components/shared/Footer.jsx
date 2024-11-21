@@ -71,7 +71,7 @@ export default function Footer() {
         <div>
           <h3 className="text-lg font-bold mb-4">Join our club</h3>
           <a
-            href="https://docs.google.com/forms"
+            href="https://forms.gle/yvKCB6D7x2Mj6ffh9"
             target="_blank"
             className="inline-block bg-yellow-500 text-black py-2 px-6 rounded-lg border-2 border-yellow-500 font-semibold hover:bg-yellow-600"
           >
