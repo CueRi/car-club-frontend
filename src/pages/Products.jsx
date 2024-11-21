@@ -14,7 +14,7 @@ const ProductCard = ({ product }) => (
     </div>
 
     <h3 className="text-2xl font-bold text-yellow-500 mb-2">{product.name}</h3>
-    <p className="text-lg mb-4 font-semibold">${product.price}</p>
+    <p className="text-lg mb-4 font-semibold">RM{product.price}</p>
 
     <button
       onClick={() => (window.location.href = product.orderLink)}
