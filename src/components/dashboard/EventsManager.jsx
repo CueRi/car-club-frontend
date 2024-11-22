@@ -164,14 +164,14 @@ export default function EventsManager() {
             }
             required
           />
+          
           <input
             type="time"
             placeholder="Event Time"
             className="bg-gray-800 text-white p-2 rounded"
             value={formData.time}
             onChange={(e) =>
-              setFormData({ ...formData, venue: e.target.value })
-            }
+              setFormData({ ...formData, time: e.target.value })}
             required
           />
 
