@@ -12,6 +12,7 @@ export default function EventsManager() {
     title: "",
     description: "",
     date: "",
+    time: "",
     venue:"",
     image: null,
   });
@@ -89,6 +90,7 @@ export default function EventsManager() {
       description: event.description,
       date: formatDateForInput(event.date),
       venue: event.venue,
+      time: event.time,
       image: event.image,
     });
   };
@@ -110,6 +112,7 @@ export default function EventsManager() {
       description: "",
       date: "",
       venue: "",
+      time: "",
       image: null,
     });
     setEditingEvent(null);
@@ -156,6 +159,16 @@ export default function EventsManager() {
             placeholder="Event Venue"
             className="bg-gray-800 text-white p-2 rounded"
             value={formData.venue}
+            onChange={(e) =>
+              setFormData({ ...formData, venue: e.target.value })
+            }
+            required
+          />
+          <input
+            type="time"
+            placeholder="Event Time"
+            className="bg-gray-800 text-white p-2 rounded"
+            value={formData.time}
             onChange={(e) =>
               setFormData({ ...formData, venue: e.target.value })
             }
@@ -236,6 +249,7 @@ export default function EventsManager() {
                   <h4 className="text-white font-bold">{event.title}</h4>
                   <p className="text-gray-400">{formatDate(event.date)}</p>
                   <p className="text-gray-400">{event.venue}</p>
+                  <p className="text-gray-400">{event.time}</p>
                   <p className="text-gray-400 mt-1">{event.description}</p>
                 </div>
               </div>
