@@ -9,6 +9,7 @@ export default function EventsSection() {
   const [error, setError] = useState(null);
 
   const token = localStorage.getItem("token");
+
   const api = createApiClient();
 
   useEffect(() => {
@@ -40,17 +41,21 @@ export default function EventsSection() {
 
   const handleSaveToGoogleCalendar = () => {
     const currentEvent = events[currentIndex];
-    const startDateTime = new Date(currentEvent.date)
+
+    // Combine date and time for the start and end times
+    const startDateTime = new Date(`${currentEvent.date}T${currentEvent.time}`)
       .toISOString()
       .replace(/[-:]/g, "")
-      .split(".")[0] + "Z"; // ISO format for Google Calendar
+      .split(".")[0] + "Z";
+
     const endDateTime = new Date(
-      new Date(currentEvent.date).getTime() + 60 * 60 * 1000 // Adds 1 hour
+      new Date(`${currentEvent.date}T${currentEvent.time}`).getTime() + 60 * 60 * 1000 // Adds 1 hour
     )
       .toISOString()
       .replace(/[-:]/g, "")
       .split(".")[0] + "Z";
 
+    // Generate Google Calendar URL
     const calendarUrl = `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${encodeURIComponent(
       currentEvent.title
     )}&details=${encodeURIComponent(
@@ -59,6 +64,7 @@ export default function EventsSection() {
       currentEvent.venue
     )}&dates=${startDateTime}/${endDateTime}`;
 
+    // Open Google Calendar in a new tab
     window.open(calendarUrl, "_blank");
   };
 
@@ -98,12 +104,13 @@ export default function EventsSection() {
             />
           </div>
 
-          <div className="text-center flex flex-col gap-4">
+          <div className="flex flex-col gap-4">
             <h3 className="text-2xl font-semibold">{currentEvent.title}</h3>
             <p>{currentEvent.description}</p>
-            <p>{currentEvent.venue}</p>
+            <p>Venue: {currentEvent.venue}</p>
+            <p>Time: {currentEvent.time}</p>
             <p className="text-yellow-500 font-bold">
-              {formatDate(currentEvent.date)}
+              Date: {formatDate(currentEvent.date)}
             </p>
           </div>
 
