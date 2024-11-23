@@ -13,7 +13,7 @@ export default function EventsManager() {
     description: "",
     date: "",
     time: "",
-    venue:"",
+    venue: "",
     image: null,
   });
   const [editingEvent, setEditingEvent] = useState(null);
@@ -119,18 +119,20 @@ export default function EventsManager() {
     setEditingEvent(null);
   };
 
-  if (loading) return <div className="text-white">Loading events...</div>;
-  if (error) return <div className="text-red-500">{error}</div>;
+  if (loading) return <div className="text-white text-center">Loading events...</div>;
+  if (error) return <div className="text-red-500 text-center">{error}</div>;
 
   return (
-    <div className="space-y-8">
-      <h2 className="text-2xl font-bold text-yellow-500 mb-6">Manage Events</h2>
+    <div className="space-y-8 px-4 sm:px-6 lg:px-8">
+      <h2 className="text-2xl font-bold text-yellow-500 mb-6 text-center sm:text-left">
+        Manage Events
+      </h2>
 
       <form
         onSubmit={handleSubmit}
-        className="bg-gray-900 p-6 rounded-lg space-y-4"
+        className="bg-gray-900 p-6 rounded-lg space-y-4 shadow-lg max-w-4xl mx-auto"
       >
-        <h3 className="text-xl text-yellow-500 mb-4">
+        <h3 className="text-xl text-yellow-500 mb-4 text-center sm:text-left">
           {editingEvent ? "Edit Event" : "Add New Event"}
         </h3>
 
@@ -138,7 +140,7 @@ export default function EventsManager() {
           <input
             type="text"
             placeholder="Event Title"
-            className="bg-gray-800 text-white p-2 rounded"
+            className="bg-gray-800 text-white p-2 rounded w-full"
             value={formData.title}
             onChange={(e) =>
               setFormData({ ...formData, title: e.target.value })
@@ -148,38 +150,38 @@ export default function EventsManager() {
 
           <input
             type="date"
-            className="bg-gray-800 text-white p-2 rounded"
+            className="bg-gray-800 text-white p-2 rounded w-full"
             value={formData.date}
-            onChange={(e) => setFormData({ ...formData, date: e.target.value })}
+            onChange={(e) =>
+              setFormData({ ...formData, date: e.target.value })
+            }
             required
           />
 
-          
           <input
             type="text"
             placeholder="Event Venue"
-            className="bg-gray-800 text-white p-2 rounded"
+            className="bg-gray-800 text-white p-2 rounded w-full"
             value={formData.venue}
             onChange={(e) =>
               setFormData({ ...formData, venue: e.target.value })
             }
             required
           />
-          
+
           <input
             type="time"
-            placeholder="Event Time"
-            className="bg-gray-800 text-white p-2 rounded"
+            className="bg-gray-800 text-white p-2 rounded w-full"
             value={formData.time}
             onChange={(e) =>
-              setFormData({ ...formData, time: e.target.value })}
+              setFormData({ ...formData, time: e.target.value })
+            }
             required
           />
 
-
           <textarea
             placeholder="Description"
-            className="bg-gray-800 text-white p-2 rounded md:col-span-2"
+            className="bg-gray-800 text-white p-2 rounded w-full md:col-span-2"
             rows={4}
             value={formData.description}
             onChange={(e) =>
@@ -208,10 +210,10 @@ export default function EventsManager() {
           </div>
         </div>
 
-        <div className="flex space-x-4 mt-4">
+        <div className="flex flex-col sm:flex-row sm:space-x-4 mt-4">
           <button
             type="submit"
-            className="bg-yellow-500 text-black px-4 py-2 rounded hover:bg-yellow-600 transition-colors"
+            className="bg-yellow-500 text-black px-4 py-2 rounded hover:bg-yellow-600 transition-colors mb-2 sm:mb-0"
             disabled={uploading}
           >
             {editingEvent ? "Update Event" : "Add Event"}
@@ -229,14 +231,14 @@ export default function EventsManager() {
         </div>
       </form>
 
-      <div className="bg-gray-900 p-6 rounded-lg">
+      <div className="bg-gray-900 p-6 rounded-lg max-w-4xl mx-auto shadow-lg">
         <h3 className="text-xl text-yellow-500 mb-4">Current Events</h3>
 
         <div className="space-y-4">
           {events.map((event) => (
             <div
               key={event.id}
-              className="flex items-center justify-between bg-gray-800 p-4 rounded hover:bg-gray-750 transition-colors"
+              className="flex flex-col sm:flex-row items-center justify-between bg-gray-800 p-4 rounded hover:bg-gray-750 transition-colors space-y-4 sm:space-y-0"
             >
               <div className="flex items-center space-x-4">
                 {event.image && (
@@ -255,7 +257,7 @@ export default function EventsManager() {
                 </div>
               </div>
 
-              <div className="flex space-x-2">
+              <div className="flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-2">
                 <button
                   className="bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded focus:outline-none transition-colors"
                   onClick={() => handleEdit(event)}
