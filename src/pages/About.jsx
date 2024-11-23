@@ -53,6 +53,66 @@ export default function About() {
 
   return (
     <main className="bg-black text-white">
+      {/* About Section */}
+      <section className="relative py-20">
+        <div className="absolute inset-0 bg-[url('/images/background/about.jpg')] opacity-40 bg-cover bg-center bg-no-repeat" />
+
+        <div className="container mx-auto px-4 relative z-10">
+          <h2 className="text-4xl md:text-8xl font-bold text-yellow-500 mb-10 font-[Antonio]">
+            ABOUT US
+          </h2>
+          <p className="text-lg md:text-2xl max-w-4xl mx-auto mb-6">
+            Welcome to the Sunway Car Enthusiast Club (SCEC), a dynamic
+            community of passionate students and alumni from Sunway University
+            and College. United by our love for cars and car culture, we aim to
+            create a diverse and inclusive environment that fosters awareness of
+            the automotive industry, promotes gender equality, and champions
+            innovations like electric vehicles.
+          </p>
+          <p className="text-lg md:text-2xl max-w-4xl mx-auto mb-6">
+            Our club organizes a variety of engaging events throughout the year,
+            including car meets, kart racing, competitions, and outdoor events.
+            We celebrate our shared passion for the automotive world.
+          </p>
+          <p className="text-lg md:text-2xl max-w-4xl mx-auto">
+            Join us as we drive toward a future that embraces innovation,
+            inclusivity, and a deep appreciation for all things automotive!
+          </p>
+        </div>
+      </section>
+
+      {/* Mission & Vision Section */}
+      <section className="py-20">
+        <div className="container mx-auto px-4">
+          <h2 className="text-4xl md:text-8xl font-bold text-yellow-500 mb-10 font-[Antonio]">
+            MISSION & VISION
+          </h2>
+          <div className="flex flex-col md:flex-row justify-center items-center gap-10">
+            <div className="max-w-sm text-center">
+              <div className="text-yellow-500 text-6xl mb-4">🎯</div>
+              <p className="text-lg">
+                Unite Sunway car enthusiasts to promote automotive culture,
+                foster learning, collaboration, and innovation through inclusive
+                events, education, and a focus on gender equality and
+                sustainability in the evolving car industry.
+              </p>
+            </div>
+
+            <div className="hidden md:block border-r-2 border-yellow-500 h-64" />
+
+            <div className="max-w-sm text-center">
+              <div className="text-yellow-500 text-6xl mb-4">🔭</div>
+              <p className="text-lg">
+                Be a leading platform at Sunway University, inspiring a diverse
+                car enthusiast community, promoting automotive advancements, and
+                supporting a more inclusive, sustainable global car culture.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Meet the Team Section */}
       <section className="py-20 bg-black">
         <div className="container mx-auto px-4">
           <h2 className="text-4xl md:text-8xl font-bold text-yellow-500 mb-10 font-[Antonio] text-center">
