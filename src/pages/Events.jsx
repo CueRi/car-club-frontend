@@ -4,7 +4,6 @@ import { formatDate } from "../utils/dateUtils";
 
 export default function EventsSection() {
   const [events, setEvents] = useState([]);
-  const [currentIndex, setCurrentIndex] = useState(0);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
@@ -30,33 +29,24 @@ export default function EventsSection() {
     fetchEvents();
   }, [token]);
 
-  const handlePrevious = () => {
-    setCurrentIndex((prev) => (prev === 0 ? events.length - 1 : prev - 1));
-  };
-
-  const handleNext = () => {
-    setCurrentIndex((prev) => (prev === events.length - 1 ? 0 : prev + 1));
-  };
-
-  const handleSaveToGoogleCalendar = () => {
-    const currentEvent = events[currentIndex];
-    const startDateTime = new Date(currentEvent.date)
+  const handleSaveToGoogleCalendar = (event) => {
+    const startDateTime = new Date(event.date)
       .toISOString()
       .replace(/[-:]/g, "")
       .split(".")[0] + "Z"; // ISO format for Google Calendar
     const endDateTime = new Date(
-      new Date(currentEvent.date).getTime() + 60 * 60 * 1000 // Adds 1 hour
+      new Date(event.date).getTime() + 60 * 60 * 1000 // Adds 1 hour
     )
       .toISOString()
       .replace(/[-:]/g, "")
       .split(".")[0] + "Z";
 
     const calendarUrl = `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${encodeURIComponent(
-      currentEvent.title
+      event.title
     )}&details=${encodeURIComponent(
-      currentEvent.description
+      event.description
     )}&location=${encodeURIComponent(
-      currentEvent.venue
+      event.venue
     )}&dates=${startDateTime}/${endDateTime}`;
 
     window.open(calendarUrl, "_blank");
@@ -74,8 +64,6 @@ export default function EventsSection() {
     return <div>No events available</div>;
   }
 
-  const currentEvent = events[currentIndex];
-
   return (
     <section className="relative bg-black text-white py-16 min-h-screen flex items-center justify-center overflow-hidden">
       <img
@@ -89,45 +77,36 @@ export default function EventsSection() {
           LATEST HAPPENINGS
         </h2>
 
-        <div className="w-full max-w-3xl mx-auto bg-gray-500 bg-opacity-75 p-6 md:p-8 rounded-lg shadow-md flex flex-col items-center">
-          <div className="relative w-full max-w-sm mx-auto mb-4">
-            <img
-              src={currentEvent.image}
-              alt={currentEvent.title}
-              className="w-full h-full object-cover rounded-lg aspect-square"
-            />
-          </div>
-
-          <div className="flex flex-col gap-4">
-            <h3 className="text-2xl text-center text-yellow-500 font-semibold">{currentEvent.title}</h3>
-            <p>{currentEvent.description}</p>
-            <p>Venue: {currentEvent.venue}</p>
-            <p>Time: {currentEvent.time}</p>
-            <p>Date: {formatDate(currentEvent.date)}</p>
-          </div>
-
-          <div className="flex justify-center gap-4 mt-8">
-            <button
-              onClick={handlePrevious}
-              className="inline-block bg-black text-yellow-500 py-2 px-6 rounded-lg font-semibold text-lg md:text-2xl"
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+          {events.map((event) => (
+            <div
+              key={event.id}
+              className="bg-gray-500 bg-opacity-75 p-6 md:p-8 rounded-lg shadow-md flex flex-col items-center"
             >
-              PREVIOUS
-            </button>
+              <div className="relative w-full max-w-sm mx-auto mb-4">
+                <img
+                  src={event.image}
+                  alt={event.title}
+                  className="w-full h-full object-cover rounded-lg aspect-square"
+                />
+              </div>
 
-            <button
-              onClick={handleSaveToGoogleCalendar}
-              className="inline-block bg-black text-yellow-500 py-2 px-6 rounded-lg font-semibold text-lg md:text-2xl"
-            >
-              REMIND ME
-            </button>
+              <div className="flex flex-col gap-4 text-center">
+                <h3 className="text-2xl text-yellow-500 font-semibold">{event.title}</h3>
+                <p>{event.description}</p>
+                <p>Venue: {event.venue}</p>
+                <p>Time: {event.time}</p>
+                <p>Date: {formatDate(event.date)}</p>
+              </div>
 
-            <button
-              onClick={handleNext}
-              className="inline-block bg-black text-yellow-500 py-2 px-6 rounded-lg font-semibold text-lg md:text-2xl"
-            >
-              NEXT
-            </button>
-          </div>
+              <button
+                onClick={() => handleSaveToGoogleCalendar(event)}
+                className="mt-4 inline-block bg-black text-yellow-500 py-2 px-6 rounded-lg font-semibold text-lg"
+              >
+                REMIND ME
+              </button>
+            </div>
+          ))}
         </div>
       </div>
     </section>
