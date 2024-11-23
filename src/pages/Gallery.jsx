@@ -120,7 +120,9 @@ export default function Gallery() {
                     </p>
 
                     <div className="relative">
-                      <div className="flex justify-center space-x-4">
+                      <div
+                        className="flex flex-wrap justify-center space-y-4 md:space-y-0 md:space-x-4"
+                      >
                         {event.images
                           .slice(
                             currentImageIndex[eventIndex],
@@ -129,12 +131,12 @@ export default function Gallery() {
                           .map((imageUrl, imageIndex) => (
                             <div
                               key={imageIndex}
-                              className="w-full max-w-[calc(33.333%-1rem)]"
+                              className="w-full md:max-w-[calc(33.333%-1rem)] px-2 md:px-0"
                             >
                               <img
                                 src={imageUrl}
                                 alt={`${event.event} - Image ${imageIndex + 1}`}
-                                className="w-full h-[400px] object-cover rounded-lg transition-all duration-500 ease-in-out transform"
+                                className="w-full h-[200px] md:h-[400px] object-cover rounded-lg transition-all duration-500 ease-in-out transform"
                               />
                             </div>
                           ))}
