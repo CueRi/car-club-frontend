@@ -40,17 +40,12 @@ export default function EventsSection() {
 
   const handleSaveToGoogleCalendar = () => {
     const currentEvent = events[currentIndex];
-    if (!currentEvent) return;
-
-    const startDateTime = new Date(
-      `${currentEvent.date}T${currentEvent.time}`
-    )
+    const startDateTime = new Date(currentEvent.date)
       .toISOString()
       .replace(/[-:]/g, "")
       .split(".")[0] + "Z"; // ISO format for Google Calendar
     const endDateTime = new Date(
-      new Date(`${currentEvent.date}T${currentEvent.time}`).getTime() +
-        60 * 60 * 1000 // Adds 1 hour
+      new Date(currentEvent.date).getTime() + 60 * 60 * 1000 // Adds 1 hour
     )
       .toISOString()
       .replace(/[-:]/g, "")
@@ -64,7 +59,6 @@ export default function EventsSection() {
       currentEvent.venue
     )}&dates=${startDateTime}/${endDateTime}`;
 
-    // Open the link in a new tab
     window.open(calendarUrl, "_blank");
   };
 
@@ -104,13 +98,12 @@ export default function EventsSection() {
             />
           </div>
 
-          <div className="flex flex-col gap-4 text-center">
+          <div className="text-center flex flex-col gap-4">
             <h3 className="text-2xl font-semibold">{currentEvent.title}</h3>
             <p>{currentEvent.description}</p>
-            <p>Venue: {currentEvent.venue}</p>
-            <p>Time: {currentEvent.time}</p>
+            <p>{currentEvent.venue}</p>
             <p className="text-yellow-500 font-bold">
-              Date: {formatDate(currentEvent.date)}
+              {formatDate(currentEvent.date)}
             </p>
           </div>
 
