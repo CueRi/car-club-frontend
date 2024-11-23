@@ -41,21 +41,22 @@ export default function EventsSection() {
 
   const handleSaveToGoogleCalendar = () => {
     const currentEvent = events[currentIndex];
-
-    // Combine date and time for the start and end times
-    const startDateTime = new Date(`${currentEvent.date}T${currentEvent.time}`)
+  
+    // Ensure date and time are correctly combined
+    const startDate = new Date(`${currentEvent.date}T${currentEvent.time}`);
+    const endDate = new Date(startDate.getTime() + 60 * 60 * 1000); // Adds 1 hour
+  
+    // Convert to Google Calendar-compatible format (YYYYMMDDTHHMMSSZ)
+    const startDateTime = startDate
       .toISOString()
       .replace(/[-:]/g, "")
       .split(".")[0] + "Z";
-
-    const endDateTime = new Date(
-      new Date(`${currentEvent.date}T${currentEvent.time}`).getTime() + 60 * 60 * 1000 // Adds 1 hour
-    )
+    const endDateTime = endDate
       .toISOString()
       .replace(/[-:]/g, "")
       .split(".")[0] + "Z";
-
-    // Generate Google Calendar URL
+  
+    // Construct the Google Calendar URL
     const calendarUrl = `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${encodeURIComponent(
       currentEvent.title
     )}&details=${encodeURIComponent(
@@ -63,8 +64,8 @@ export default function EventsSection() {
     )}&location=${encodeURIComponent(
       currentEvent.venue
     )}&dates=${startDateTime}/${endDateTime}`;
-
-    // Open Google Calendar in a new tab
+  
+    // Open the Google Calendar event creation page
     window.open(calendarUrl, "_blank");
   };
 
