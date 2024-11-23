@@ -9,7 +9,6 @@ export default function EventsSection() {
   const [error, setError] = useState(null);
 
   const token = localStorage.getItem("token");
-
   const api = createApiClient();
 
   useEffect(() => {
@@ -41,22 +40,17 @@ export default function EventsSection() {
 
   const handleSaveToGoogleCalendar = () => {
     const currentEvent = events[currentIndex];
-  
-    // Ensure date and time are correctly combined
-    const startDate = new Date(`${currentEvent.date}T${currentEvent.time}`);
-    const endDate = new Date(startDate.getTime() + 60 * 60 * 1000); // Adds 1 hour
-  
-    // Convert to Google Calendar-compatible format (YYYYMMDDTHHMMSSZ)
-    const startDateTime = startDate
+    const startDateTime = new Date(currentEvent.date)
+      .toISOString()
+      .replace(/[-:]/g, "")
+      .split(".")[0] + "Z"; // ISO format for Google Calendar
+    const endDateTime = new Date(
+      new Date(currentEvent.date).getTime() + 60 * 60 * 1000 // Adds 1 hour
+    )
       .toISOString()
       .replace(/[-:]/g, "")
       .split(".")[0] + "Z";
-    const endDateTime = endDate
-      .toISOString()
-      .replace(/[-:]/g, "")
-      .split(".")[0] + "Z";
-  
-    // Construct the Google Calendar URL
+
     const calendarUrl = `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${encodeURIComponent(
       currentEvent.title
     )}&details=${encodeURIComponent(
@@ -64,8 +58,7 @@ export default function EventsSection() {
     )}&location=${encodeURIComponent(
       currentEvent.venue
     )}&dates=${startDateTime}/${endDateTime}`;
-  
-    // Open the Google Calendar event creation page
+
     window.open(calendarUrl, "_blank");
   };
 
