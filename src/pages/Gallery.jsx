@@ -115,12 +115,12 @@ export default function Gallery() {
                       {event.event}
                     </h2>
 
-                    <p className="text-center text-lg mb-8 text-white">
+                    <p className="text-center text-sm md:text-lg mb-8 text-white">
                       {event.description}
                     </p>
 
                     <div className="relative">
-                      <div className="flex justify-center space-x-4">
+                      <div className="flex justify-center items-center overflow-hidden space-x-4 flex-wrap">
                         {event.images
                           .slice(
                             currentImageIndex[eventIndex],
@@ -129,21 +129,22 @@ export default function Gallery() {
                           .map((imageUrl, imageIndex) => (
                             <div
                               key={imageIndex}
-                              className="w-full max-w-[calc(33.333%-1rem)]"
+                              className="w-full sm:w-1/2 md:w-1/3 px-2"
                             >
                               <img
                                 src={imageUrl}
                                 alt={`${event.event} - Image ${imageIndex + 1}`}
-                                className="w-full h-[400px] object-cover rounded-lg transition-all duration-500 ease-in-out transform"
+                                className="w-full h-[200px] sm:h-[300px] md:h-[400px] object-cover rounded-lg shadow-lg transition-all duration-500 ease-in-out transform hover:scale-105"
                               />
                             </div>
                           ))}
                       </div>
 
+                      {/* Navigation Buttons */}
                       <div className="absolute top-1/2 left-4 transform -translate-y-1/2">
                         <button
                           onClick={() => handlePrevious(eventIndex)}
-                          className="bg-yellow-500 text-black p-4 rounded-full hover:bg-yellow-600 transition duration-300"
+                          className="bg-yellow-500 text-black p-3 md:p-4 rounded-full hover:bg-yellow-600 transition duration-300"
                         >
                           <ChevronLeft className="w-6 h-6" />
                         </button>
@@ -151,7 +152,7 @@ export default function Gallery() {
                       <div className="absolute top-1/2 right-4 transform -translate-y-1/2">
                         <button
                           onClick={() => handleNext(eventIndex)}
-                          className="bg-yellow-500 text-black p-4 rounded-full hover:bg-yellow-600 transition duration-300"
+                          className="bg-yellow-500 text-black p-3 md:p-4 rounded-full hover:bg-yellow-600 transition duration-300"
                         >
                           <ChevronRight className="w-6 h-6" />
                         </button>
