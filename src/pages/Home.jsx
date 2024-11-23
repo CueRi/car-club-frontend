@@ -6,7 +6,6 @@ import { formatDate } from "../utils/dateUtils";
 
 export default function Home() {
   const [events, setEvents] = useState([]);
-  const [currentEventIndex, setCurrentEventIndex] = useState(0);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [carOfTheMonth, setCarOfTheMonth] = useState(null);
@@ -42,14 +41,6 @@ export default function Home() {
     fetchEvents();
     fetchCarOfTheMonth();
   }, []);
-
-  const handlePrevEvent = () => {
-    setCurrentEventIndex((prev) => (prev === 0 ? events.length - 1 : prev - 1));
-  };
-
-  const handleNextEvent = () => {
-    setCurrentEventIndex((prev) => (prev === events.length - 1 ? 0 : prev + 1));
-  };
 
   return (
     <main className="bg-black text-white">
@@ -89,42 +80,42 @@ export default function Home() {
               <p>{error}</p>
             </div>
           ) : events.length > 0 ? (
-            <div className="w-full max-w-4xl mx-auto bg-gray-800 bg-opacity-90 p-8 rounded-lg shadow-md">
-              <div className="relative flex items-center justify-between gap-8">
-                <button
-                  onClick={handlePrevEvent}
-                  className="bg-yellow-500 text-black p-4 rounded-full hover:bg-yellow-600 transition duration-300"
-                >
-                  <ChevronLeft className="w-6 h-6" />
-                </button>
-                <div className="w-full flex flex-col items-center">
-                  <div className="w-full max-w-xs mx-auto aspect-square mb-6 flex justify-center items-center">
-                    <img
-                      src={events[currentEventIndex].image}
-                      alt={events[currentEventIndex].title}
-                      className="w-full h-full object-cover rounded-lg"
-                    />
+            <>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                {events.slice(0, 2).map((event, index) => (
+                  <div
+                    key={index}
+                    className="w-full bg-gray-800 bg-opacity-90 p-8 rounded-lg shadow-md"
+                  >
+                    <div className="flex flex-col items-center">
+                      <div className="w-full max-w-xs mx-auto aspect-square mb-6 flex justify-center items-center">
+                        <img
+                          src={event.image}
+                          alt={event.title}
+                          className="w-full h-full object-cover rounded-lg"
+                        />
+                      </div>
+                      <h3 className="text-2xl font-semibold mb-2 text-center">
+                        {event.title}
+                      </h3>
+                      <p className="mb-4 text-center">{event.description}</p>
+                      <p className="text-yellow-500 font-bold text-center">
+                        {formatDate(event.date)}
+                      </p>
+                    </div>
                   </div>
-
-
-                  <h3 className="text-2xl font-semibold mb-2">
-                    {events[currentEventIndex].title}
-                  </h3>
-                  <p className="mb-4 text-center">
-                    {events[currentEventIndex].description}
-                  </p>
-                  <p className="text-yellow-500 font-bold">
-                    {formatDate(events[currentEventIndex].date)}
-                  </p>
-                </div>
-                <button
-                  onClick={handleNextEvent}
-                  className="bg-yellow-500 text-black p-4 rounded-full hover:bg-yellow-600 transition duration-300"
-                >
-                  <ChevronRight className="w-6 h-6" />
-                </button>
+                ))}
               </div>
-            </div>
+
+              <div className="flex justify-center mt-8">
+                <Link
+                  to="/events"
+                  className="bg-yellow-500 text-black py-3 px-8 rounded-full font-semibold text-lg hover:bg-yellow-600 transition-all"
+                >
+                  SHOW MORE EVENTS
+                </Link>
+              </div>
+            </>
           ) : (
             <div className="text-center text-yellow-500">
               <p>No events available at the moment.</p>
@@ -147,12 +138,11 @@ export default function Home() {
                     alt={carOfTheMonth.title}
                     className="w-full h-auto rounded-lg"
                     style={{
-                      maxHeight: '400px',
-                      maxWidth: '100%',
+                      maxHeight: "400px",
+                      maxWidth: "100%",
                     }}
                   />
                 </div>
-
 
                 <h3 className="text-3xl font-bold text-center text-yellow-400 mb-4">
                   {carOfTheMonth.title}
