@@ -98,14 +98,15 @@ export default function Home() {
                   <ChevronLeft className="w-6 h-6" />
                 </button>
                 <div className="w-full flex flex-col items-center">
-                  <div className="relative w-full max-w-md mx-auto aspect-[4/3] mb-6">
+                  <div className="relative w-full max-w-sm mx-auto aspect-square mb-6">
                     <img
                       src={events[currentEventIndex].image}
                       alt={events[currentEventIndex].title}
                       className="absolute inset-0 w-full h-full object-cover rounded-lg"
-                      style={{ maxHeight: '300px' }}
+                      style={{ maxWidth: '300px', maxHeight: '300px' }}
                     />
                   </div>
+
                   <h3 className="text-2xl font-semibold mb-2">
                     {events[currentEventIndex].title}
                   </h3>
@@ -144,10 +145,14 @@ export default function Home() {
                   <img
                     src={carOfTheMonth.image}
                     alt={carOfTheMonth.title}
-                    className="w-full h-auto rounded-lg object-cover"
-                    style={{ maxHeight: "250px", maxWidth: "100%" }}
+                    className="w-full h-auto rounded-lg"
+                    style={{
+                      maxHeight: '400px',
+                      maxWidth: '100%',
+                    }}
                   />
                 </div>
+
 
                 <h3 className="text-3xl font-bold text-center text-yellow-400 mb-4">
                   {carOfTheMonth.title}
