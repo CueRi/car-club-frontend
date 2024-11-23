@@ -1,5 +1,4 @@
 import { useState, useEffect } from "react";
-import { ChevronLeft, ChevronRight } from "lucide-react";
 import { createApiClient, handleApiError } from "../utils/apiUtils";
 
 const API_URL = import.meta.env.VITE_CAR_CLUB_URL;
@@ -32,15 +31,8 @@ export default function Gallery() {
     setAutoScrolling(false);
   };
 
-  const handlePrevious = (eventIndex) => {
-    setCurrentImageIndex((prevState) => {
-      const totalImages = galleryData[eventIndex].images.length;
-      const newIndex =
-        prevState[eventIndex] === 0
-          ? totalImages - 1
-          : prevState[eventIndex] - 1;
-      return { ...prevState, [eventIndex]: newIndex };
-    });
+  const startAutoScrolling = () => {
+    setAutoScrolling(true);
   };
 
   const handleNext = (eventIndex) => {
@@ -54,19 +46,25 @@ export default function Gallery() {
     });
   };
 
+  const handlePrevious = (eventIndex) => {
+    setCurrentImageIndex((prevState) => {
+      const totalImages = galleryData[eventIndex].images.length;
+      const newIndex =
+        prevState[eventIndex] === 0
+          ? totalImages - 1
+          : prevState[eventIndex] - 1;
+      return { ...prevState, [eventIndex]: newIndex };
+    });
+  };
+
   useEffect(() => {
     if (!autoScrolling) return;
 
-    const autoSlide = galleryData.map((_, eventIndex) => {
-      const interval = setInterval(() => {
-        handleNext(eventIndex);
-      }, 5000);
-      return interval;
-    });
+    const intervals = galleryData.map((_, eventIndex) =>
+      setInterval(() => handleNext(eventIndex), 5000)
+    );
 
-    return () => {
-      autoSlide.forEach((interval) => clearInterval(interval));
-    };
+    return () => intervals.forEach((interval) => clearInterval(interval));
   }, [galleryData, autoScrolling]);
 
   return (
@@ -110,6 +108,7 @@ export default function Gallery() {
                     key={eventIndex}
                     className="mb-12"
                     onMouseEnter={stopAutoScrolling}
+                    onMouseLeave={startAutoScrolling}
                   >
                     <h2 className="text-2xl md:text-4xl font-bold text-white mb-4 text-center font-[Antonio]">
                       {event.event}
@@ -119,44 +118,47 @@ export default function Gallery() {
                       {event.description}
                     </p>
 
-                    <div className="relative">
-                      <div className="flex justify-center items-center overflow-hidden space-x-4 flex-wrap">
-                        {event.images
-                          .slice(
-                            currentImageIndex[eventIndex],
-                            currentImageIndex[eventIndex] + 3
-                          )
-                          .map((imageUrl, imageIndex) => (
-                            <div
-                              key={imageIndex}
-                              className="w-full sm:w-1/2 md:w-1/3 px-2"
-                            >
-                              <img
-                                src={imageUrl}
-                                alt={`${event.event} - Image ${imageIndex + 1}`}
-                                className="w-full h-[200px] sm:h-[300px] md:h-[400px] object-cover rounded-lg shadow-lg transition-all duration-500 ease-in-out transform hover:scale-105"
-                              />
-                            </div>
-                          ))}
+                    <div className="relative overflow-hidden">
+                      <div
+                        className="flex transition-transform duration-700 ease-in-out"
+                        style={{
+                          transform: `translateX(-${
+                            currentImageIndex[eventIndex] * 100
+                          }%)`,
+                        }}
+                      >
+                        {event.images.map((imageUrl, imageIndex) => (
+                          <div
+                            key={imageIndex}
+                            className="w-full flex-shrink-0"
+                            style={{ width: "100%" }}
+                          >
+                            <img
+                              src={imageUrl}
+                              alt={`${event.event} - Image ${imageIndex + 1}`}
+                              className="w-full h-[200px] sm:h-[300px] md:h-[400px] object-cover rounded-lg shadow-lg"
+                            />
+                          </div>
+                        ))}
                       </div>
+                    </div>
 
-                      {/* Navigation Buttons */}
-                      <div className="absolute top-1/2 left-4 transform -translate-y-1/2">
-                        <button
-                          onClick={() => handlePrevious(eventIndex)}
-                          className="bg-yellow-500 text-black p-3 md:p-4 rounded-full hover:bg-yellow-600 transition duration-300"
-                        >
-                          <ChevronLeft className="w-6 h-6" />
-                        </button>
-                      </div>
-                      <div className="absolute top-1/2 right-4 transform -translate-y-1/2">
-                        <button
-                          onClick={() => handleNext(eventIndex)}
-                          className="bg-yellow-500 text-black p-3 md:p-4 rounded-full hover:bg-yellow-600 transition duration-300"
-                        >
-                          <ChevronRight className="w-6 h-6" />
-                        </button>
-                      </div>
+                    {/* Navigation Controls */}
+                    <div className="absolute top-1/2 left-4 transform -translate-y-1/2">
+                      <button
+                        onClick={() => handlePrevious(eventIndex)}
+                        className="bg-yellow-500 text-black p-3 md:p-4 rounded-full hover:bg-yellow-600 transition duration-300"
+                      >
+                        &#9664;
+                      </button>
+                    </div>
+                    <div className="absolute top-1/2 right-4 transform -translate-y-1/2">
+                      <button
+                        onClick={() => handleNext(eventIndex)}
+                        className="bg-yellow-500 text-black p-3 md:p-4 rounded-full hover:bg-yellow-600 transition duration-300"
+                      >
+                        &#9654;
+                      </button>
                     </div>
                   </div>
                 );
