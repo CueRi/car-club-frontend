@@ -99,13 +99,11 @@ export default function EventsSection() {
           </div>
 
           <div className="flex flex-col gap-4">
-            <h3 className="text-2xl font-semibold">{currentEvent.title}</h3>
+            <h3 className="text-2xl text-center text-yellow-500 font-semibold">{currentEvent.title}</h3>
             <p>{currentEvent.description}</p>
             <p>Venue: {currentEvent.venue}</p>
             <p>Time: {currentEvent.time}</p>
-            <p className="text-yellow-500 font-bold">
-              Date: {formatDate(currentEvent.date)}
-            </p>
+            <p>Date: {formatDate(currentEvent.date)}</p>
           </div>
 
           <div className="flex justify-center gap-4 mt-8">
