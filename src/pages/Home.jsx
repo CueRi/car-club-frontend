@@ -98,14 +98,14 @@ export default function Home() {
                   <ChevronLeft className="w-6 h-6" />
                 </button>
                 <div className="w-full flex flex-col items-center">
-                  <div className="relative w-full max-w-sm mx-auto aspect-square mb-6">
+                  <div className="w-full max-w-xs mx-auto aspect-square mb-6 flex justify-center items-center">
                     <img
                       src={events[currentEventIndex].image}
                       alt={events[currentEventIndex].title}
-                      className="absolute inset-0 w-full h-full object-cover rounded-lg"
-                      style={{ maxWidth: '300px', maxHeight: '300px' }}
+                      className="w-full h-full object-cover rounded-lg"
                     />
                   </div>
+
 
                   <h3 className="text-2xl font-semibold mb-2">
                     {events[currentEventIndex].title}
