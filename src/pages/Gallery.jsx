@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { createApiClient, handleApiError } from "../utils/apiUtils";
 
 const API_URL = import.meta.env.VITE_CAR_CLUB_URL;
@@ -8,8 +8,8 @@ export default function Gallery() {
   const [currentImageIndex, setCurrentImageIndex] = useState({});
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [autoScrolling, setAutoScrolling] = useState(true);
   const api = createApiClient();
+  const sliderRefs = useRef([]);
 
   useEffect(() => {
     const fetchGallery = async () => {
@@ -27,45 +27,55 @@ export default function Gallery() {
     fetchGallery();
   }, [api]);
 
-  const stopAutoScrolling = () => {
-    setAutoScrolling(false);
+  const initializeIndex = (eventIndex) => {
+    if (!Object.hasOwn(currentImageIndex, eventIndex)) {
+      setCurrentImageIndex((prevState) => ({
+        ...prevState,
+        [eventIndex]: 0,
+      }));
+    }
   };
 
-  const startAutoScrolling = () => {
-    setAutoScrolling(true);
+  const handleSwipe = (eventIndex, deltaX) => {
+    const totalImages = galleryData[eventIndex].images.length;
+    const threshold = 50; // Minimum distance to detect a swipe
+    if (deltaX > threshold) {
+      // Swipe right
+      setCurrentImageIndex((prevState) => ({
+        ...prevState,
+        [eventIndex]:
+          prevState[eventIndex] === 0 ? totalImages - 1 : prevState[eventIndex] - 1,
+      }));
+    } else if (deltaX < -threshold) {
+      // Swipe left
+      setCurrentImageIndex((prevState) => ({
+        ...prevState,
+        [eventIndex]:
+          prevState[eventIndex] === totalImages - 1 ? 0 : prevState[eventIndex] + 1,
+      }));
+    }
   };
 
-  const handleNext = (eventIndex) => {
-    setCurrentImageIndex((prevState) => {
-      const totalImages = galleryData[eventIndex].images.length;
-      const newIndex =
-        prevState[eventIndex] === totalImages - 1
-          ? 0
-          : prevState[eventIndex] + 1;
-      return { ...prevState, [eventIndex]: newIndex };
-    });
+  const handleTouchStart = (event, eventIndex) => {
+    const startX = event.touches[0].clientX;
+    sliderRefs.current[eventIndex] = startX;
   };
 
-  const handlePrevious = (eventIndex) => {
-    setCurrentImageIndex((prevState) => {
-      const totalImages = galleryData[eventIndex].images.length;
-      const newIndex =
-        prevState[eventIndex] === 0
-          ? totalImages - 1
-          : prevState[eventIndex] - 1;
-      return { ...prevState, [eventIndex]: newIndex };
-    });
+  const handleTouchEnd = (event, eventIndex) => {
+    const endX = event.changedTouches[0].clientX;
+    const deltaX = endX - sliderRefs.current[eventIndex];
+    handleSwipe(eventIndex, deltaX);
   };
 
-  useEffect(() => {
-    if (!autoScrolling) return;
+  const handleMouseDown = (event, eventIndex) => {
+    sliderRefs.current[eventIndex] = event.clientX;
+  };
 
-    const intervals = galleryData.map((_, eventIndex) =>
-      setInterval(() => handleNext(eventIndex), 5000)
-    );
-
-    return () => intervals.forEach((interval) => clearInterval(interval));
-  }, [galleryData, autoScrolling]);
+  const handleMouseUp = (event, eventIndex) => {
+    const endX = event.clientX;
+    const deltaX = endX - sliderRefs.current[eventIndex];
+    handleSwipe(eventIndex, deltaX);
+  };
 
   return (
     <main className="min-h-screen bg-black">
@@ -96,20 +106,10 @@ export default function Gallery() {
           ) : (
             <div className="space-y-12">
               {galleryData.map((event, eventIndex) => {
-                if (!Object.hasOwn(currentImageIndex, eventIndex)) {
-                  setCurrentImageIndex((prevState) => ({
-                    ...prevState,
-                    [eventIndex]: 0,
-                  }));
-                }
+                initializeIndex(eventIndex);
 
                 return (
-                  <div
-                    key={eventIndex}
-                    className="mb-12"
-                    onMouseEnter={stopAutoScrolling}
-                    onMouseLeave={startAutoScrolling}
-                  >
+                  <div key={eventIndex} className="mb-12">
                     <h2 className="text-2xl md:text-4xl font-bold text-white mb-4 text-center font-[Antonio]">
                       {event.event}
                     </h2>
@@ -118,7 +118,13 @@ export default function Gallery() {
                       {event.description}
                     </p>
 
-                    <div className="relative overflow-hidden">
+                    <div
+                      className="relative overflow-hidden"
+                      onMouseDown={(e) => handleMouseDown(e, eventIndex)}
+                      onMouseUp={(e) => handleMouseUp(e, eventIndex)}
+                      onTouchStart={(e) => handleTouchStart(e, eventIndex)}
+                      onTouchEnd={(e) => handleTouchEnd(e, eventIndex)}
+                    >
                       <div
                         className="flex transition-transform duration-700 ease-in-out"
                         style={{
@@ -141,24 +147,6 @@ export default function Gallery() {
                           </div>
                         ))}
                       </div>
-                    </div>
-
-                    {/* Navigation Controls */}
-                    <div className="absolute top-1/2 left-4 transform -translate-y-1/2">
-                      <button
-                        onClick={() => handlePrevious(eventIndex)}
-                        className="bg-yellow-500 text-black p-3 md:p-4 rounded-full hover:bg-yellow-600 transition duration-300"
-                      >
-                        &#9664;
-                      </button>
-                    </div>
-                    <div className="absolute top-1/2 right-4 transform -translate-y-1/2">
-                      <button
-                        onClick={() => handleNext(eventIndex)}
-                        className="bg-yellow-500 text-black p-3 md:p-4 rounded-full hover:bg-yellow-600 transition duration-300"
-                      >
-                        &#9654;
-                      </button>
                     </div>
                   </div>
                 );
