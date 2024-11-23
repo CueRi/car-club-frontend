@@ -1,15 +1,12 @@
 import { useState, useEffect } from "react";
-import { ChevronLeft, ChevronRight } from "lucide-react";
 import { createApiClient, handleApiError } from "../utils/apiUtils";
 
 const API_URL = import.meta.env.VITE_CAR_CLUB_URL;
 
 export default function Gallery() {
   const [galleryData, setGalleryData] = useState([]);
-  const [currentImageIndex, setCurrentImageIndex] = useState({});
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [autoScrolling, setAutoScrolling] = useState(true);
   const api = createApiClient();
 
   useEffect(() => {
@@ -27,47 +24,6 @@ export default function Gallery() {
 
     fetchGallery();
   }, [api]);
-
-  const stopAutoScrolling = () => {
-    setAutoScrolling(false);
-  };
-
-  const handlePrevious = (eventIndex) => {
-    setCurrentImageIndex((prevState) => {
-      const totalImages = galleryData[eventIndex].images.length;
-      const newIndex =
-        prevState[eventIndex] === 0
-          ? totalImages - 1
-          : prevState[eventIndex] - 1;
-      return { ...prevState, [eventIndex]: newIndex };
-    });
-  };
-
-  const handleNext = (eventIndex) => {
-    setCurrentImageIndex((prevState) => {
-      const totalImages = galleryData[eventIndex].images.length;
-      const newIndex =
-        prevState[eventIndex] === totalImages - 1
-          ? 0
-          : prevState[eventIndex] + 1;
-      return { ...prevState, [eventIndex]: newIndex };
-    });
-  };
-
-  useEffect(() => {
-    if (!autoScrolling) return;
-
-    const autoSlide = galleryData.map((_, eventIndex) => {
-      const interval = setInterval(() => {
-        handleNext(eventIndex);
-      }, 5000);
-      return interval;
-    });
-
-    return () => {
-      autoSlide.forEach((interval) => clearInterval(interval));
-    };
-  }, [galleryData, autoScrolling]);
 
   return (
     <main className="min-h-screen bg-black">
@@ -97,71 +53,29 @@ export default function Gallery() {
             <div className="text-red-500 text-center py-20">{error}</div>
           ) : (
             <div className="space-y-12">
-              {galleryData.map((event, eventIndex) => {
-                if (!Object.hasOwn(currentImageIndex, eventIndex)) {
-                  setCurrentImageIndex((prevState) => ({
-                    ...prevState,
-                    [eventIndex]: 0,
-                  }));
-                }
+              {galleryData.map((event, eventIndex) => (
+                <div key={eventIndex} className="mb-12">
+                  <h2 className="text-2xl md:text-4xl font-bold text-white mb-4 text-center font-[Antonio]">
+                    {event.event}
+                  </h2>
 
-                return (
-                  <div
-                    key={eventIndex}
-                    className="mb-12"
-                    onMouseEnter={stopAutoScrolling}
-                  >
-                    <h2 className="text-2xl md:text-4xl font-bold text-white mb-4 text-center font-[Antonio]">
-                      {event.event}
-                    </h2>
+                  <p className="text-center text-lg mb-8 text-white">
+                    {event.description}
+                  </p>
 
-                    <p className="text-center text-lg mb-8 text-white">
-                      {event.description}
-                    </p>
-
-                    <div className="relative">
-                      <div
-                        className="flex flex-wrap justify-center space-y-4 md:space-y-0 md:space-x-4"
-                      >
-                        {event.images
-                          .slice(
-                            currentImageIndex[eventIndex],
-                            currentImageIndex[eventIndex] + 3
-                          )
-                          .map((imageUrl, imageIndex) => (
-                            <div
-                              key={imageIndex}
-                              className="w-full md:max-w-[calc(33.333%-1rem)] px-2 md:px-0"
-                            >
-                              <img
-                                src={imageUrl}
-                                alt={`${event.event} - Image ${imageIndex + 1}`}
-                                className="w-full h-[200px] md:h-[400px] object-cover rounded-lg transition-all duration-500 ease-in-out transform"
-                              />
-                            </div>
-                          ))}
+                  <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4">
+                    {event.images.map((imageUrl, imageIndex) => (
+                      <div key={imageIndex} className="w-full">
+                        <img
+                          src={imageUrl}
+                          alt={`${event.event} - Image ${imageIndex + 1}`}
+                          className="w-full h-[150px] sm:h-[200px] lg:h-[250px] object-cover rounded-lg transition-all duration-300 hover:scale-105"
+                        />
                       </div>
-
-                      <div className="absolute top-1/2 left-4 transform -translate-y-1/2">
-                        <button
-                          onClick={() => handlePrevious(eventIndex)}
-                          className="bg-yellow-500 text-black p-4 rounded-full hover:bg-yellow-600 transition duration-300"
-                        >
-                          <ChevronLeft className="w-6 h-6" />
-                        </button>
-                      </div>
-                      <div className="absolute top-1/2 right-4 transform -translate-y-1/2">
-                        <button
-                          onClick={() => handleNext(eventIndex)}
-                          className="bg-yellow-500 text-black p-4 rounded-full hover:bg-yellow-600 transition duration-300"
-                        >
-                          <ChevronRight className="w-6 h-6" />
-                        </button>
-                      </div>
-                    </div>
+                    ))}
                   </div>
-                );
-              })}
+                </div>
+              ))}
             </div>
           )}
         </div>
