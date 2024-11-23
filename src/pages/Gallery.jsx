@@ -1,4 +1,5 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
+import { ChevronLeft, ChevronRight } from "lucide-react";
 import { createApiClient, handleApiError } from "../utils/apiUtils";
 
 const API_URL = import.meta.env.VITE_CAR_CLUB_URL;
@@ -8,8 +9,8 @@ export default function Gallery() {
   const [currentImageIndex, setCurrentImageIndex] = useState({});
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [autoScrolling, setAutoScrolling] = useState(true);
   const api = createApiClient();
-  const sliderRefs = useRef([]);
 
   useEffect(() => {
     const fetchGallery = async () => {
@@ -27,55 +28,46 @@ export default function Gallery() {
     fetchGallery();
   }, [api]);
 
-  const initializeIndex = (eventIndex) => {
-    if (!Object.hasOwn(currentImageIndex, eventIndex)) {
-      setCurrentImageIndex((prevState) => ({
-        ...prevState,
-        [eventIndex]: 0,
-      }));
-    }
+  const stopAutoScrolling = () => {
+    setAutoScrolling(false);
   };
 
-  const handleSwipe = (eventIndex, deltaX) => {
-    const totalImages = galleryData[eventIndex].images.length;
-    const threshold = 50; // Minimum distance to detect a swipe
-    if (deltaX > threshold) {
-      // Swipe right
-      setCurrentImageIndex((prevState) => ({
-        ...prevState,
-        [eventIndex]:
-          prevState[eventIndex] === 0 ? totalImages - 1 : prevState[eventIndex] - 1,
-      }));
-    } else if (deltaX < -threshold) {
-      // Swipe left
-      setCurrentImageIndex((prevState) => ({
-        ...prevState,
-        [eventIndex]:
-          prevState[eventIndex] === totalImages - 1 ? 0 : prevState[eventIndex] + 1,
-      }));
-    }
+  const handlePrevious = (eventIndex) => {
+    setCurrentImageIndex((prevState) => {
+      const totalImages = galleryData[eventIndex].images.length;
+      const newIndex =
+        prevState[eventIndex] === 0
+          ? totalImages - 1
+          : prevState[eventIndex] - 1;
+      return { ...prevState, [eventIndex]: newIndex };
+    });
   };
 
-  const handleTouchStart = (event, eventIndex) => {
-    const startX = event.touches[0].clientX;
-    sliderRefs.current[eventIndex] = startX;
+  const handleNext = (eventIndex) => {
+    setCurrentImageIndex((prevState) => {
+      const totalImages = galleryData[eventIndex].images.length;
+      const newIndex =
+        prevState[eventIndex] === totalImages - 1
+          ? 0
+          : prevState[eventIndex] + 1;
+      return { ...prevState, [eventIndex]: newIndex };
+    });
   };
 
-  const handleTouchEnd = (event, eventIndex) => {
-    const endX = event.changedTouches[0].clientX;
-    const deltaX = endX - sliderRefs.current[eventIndex];
-    handleSwipe(eventIndex, deltaX);
-  };
+  useEffect(() => {
+    if (!autoScrolling) return;
 
-  const handleMouseDown = (event, eventIndex) => {
-    sliderRefs.current[eventIndex] = event.clientX;
-  };
+    const autoSlide = galleryData.map((_, eventIndex) => {
+      const interval = setInterval(() => {
+        handleNext(eventIndex);
+      }, 5000);
+      return interval;
+    });
 
-  const handleMouseUp = (event, eventIndex) => {
-    const endX = event.clientX;
-    const deltaX = endX - sliderRefs.current[eventIndex];
-    handleSwipe(eventIndex, deltaX);
-  };
+    return () => {
+      autoSlide.forEach((interval) => clearInterval(interval));
+    };
+  }, [galleryData, autoScrolling]);
 
   return (
     <main className="min-h-screen bg-black">
@@ -106,46 +98,63 @@ export default function Gallery() {
           ) : (
             <div className="space-y-12">
               {galleryData.map((event, eventIndex) => {
-                initializeIndex(eventIndex);
+                if (!Object.hasOwn(currentImageIndex, eventIndex)) {
+                  setCurrentImageIndex((prevState) => ({
+                    ...prevState,
+                    [eventIndex]: 0,
+                  }));
+                }
 
                 return (
-                  <div key={eventIndex} className="mb-12">
+                  <div
+                    key={eventIndex}
+                    className="mb-12"
+                    onMouseEnter={stopAutoScrolling}
+                  >
                     <h2 className="text-2xl md:text-4xl font-bold text-white mb-4 text-center font-[Antonio]">
                       {event.event}
                     </h2>
 
-                    <p className="text-center text-sm md:text-lg mb-8 text-white">
+                    <p className="text-center text-lg mb-8 text-white">
                       {event.description}
                     </p>
 
-                    <div
-                      className="relative overflow-hidden"
-                      onMouseDown={(e) => handleMouseDown(e, eventIndex)}
-                      onMouseUp={(e) => handleMouseUp(e, eventIndex)}
-                      onTouchStart={(e) => handleTouchStart(e, eventIndex)}
-                      onTouchEnd={(e) => handleTouchEnd(e, eventIndex)}
-                    >
-                      <div
-                        className="flex transition-transform duration-700 ease-in-out"
-                        style={{
-                          transform: `translateX(-${
-                            currentImageIndex[eventIndex] * 100
-                          }%)`,
-                        }}
-                      >
-                        {event.images.map((imageUrl, imageIndex) => (
-                          <div
-                            key={imageIndex}
-                            className="w-full flex-shrink-0"
-                            style={{ width: "100%" }}
-                          >
-                            <img
-                              src={imageUrl}
-                              alt={`${event.event} - Image ${imageIndex + 1}`}
-                              className="w-full h-[200px] sm:h-[300px] md:h-[400px] object-cover rounded-lg shadow-lg"
-                            />
-                          </div>
-                        ))}
+                    <div className="relative">
+                      <div className="flex justify-center space-x-4">
+                        {event.images
+                          .slice(
+                            currentImageIndex[eventIndex],
+                            currentImageIndex[eventIndex] + 3
+                          )
+                          .map((imageUrl, imageIndex) => (
+                            <div
+                              key={imageIndex}
+                              className="w-full max-w-[calc(33.333%-1rem)]"
+                            >
+                              <img
+                                src={imageUrl}
+                                alt={`${event.event} - Image ${imageIndex + 1}`}
+                                className="w-full h-[400px] object-cover rounded-lg transition-all duration-500 ease-in-out transform"
+                              />
+                            </div>
+                          ))}
+                      </div>
+
+                      <div className="absolute top-1/2 left-4 transform -translate-y-1/2">
+                        <button
+                          onClick={() => handlePrevious(eventIndex)}
+                          className="bg-yellow-500 text-black p-4 rounded-full hover:bg-yellow-600 transition duration-300"
+                        >
+                          <ChevronLeft className="w-6 h-6" />
+                        </button>
+                      </div>
+                      <div className="absolute top-1/2 right-4 transform -translate-y-1/2">
+                        <button
+                          onClick={() => handleNext(eventIndex)}
+                          className="bg-yellow-500 text-black p-4 rounded-full hover:bg-yellow-600 transition duration-300"
+                        >
+                          <ChevronRight className="w-6 h-6" />
+                        </button>
                       </div>
                     </div>
                   </div>
