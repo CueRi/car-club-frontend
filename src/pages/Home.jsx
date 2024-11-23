@@ -98,11 +98,12 @@ export default function Home() {
                   <ChevronLeft className="w-6 h-6" />
                 </button>
                 <div className="w-full flex flex-col items-center">
-                  <div className="relative w-full aspect-square mb-6">
+                  <div className="relative w-full max-w-md mx-auto aspect-[4/3] mb-6">
                     <img
                       src={events[currentEventIndex].image}
                       alt={events[currentEventIndex].title}
                       className="absolute inset-0 w-full h-full object-cover rounded-lg"
+                      style={{ maxHeight: '300px' }}
                     />
                   </div>
                   <h3 className="text-2xl font-semibold mb-2">
@@ -139,12 +140,12 @@ export default function Home() {
           {carOfTheMonth ? (
             <div className="flex justify-center">
               <div className="bg-gray-900 p-10 rounded-xl shadow-xl w-full max-w-3xl">
-                <div className="mb-6 overflow-hidden rounded-lg">
+                <div className="mb-6 overflow-hidden rounded-lg flex justify-center">
                   <img
                     src={carOfTheMonth.image}
                     alt={carOfTheMonth.title}
                     className="w-full h-auto rounded-lg object-cover"
-                    style={{ maxHeight: "300px" }}
+                    style={{ maxHeight: "250px", maxWidth: "100%" }}
                   />
                 </div>
 
