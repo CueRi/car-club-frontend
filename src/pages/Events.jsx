@@ -9,7 +9,6 @@ export default function EventsSection() {
   const [error, setError] = useState(null);
 
   const token = localStorage.getItem("token");
-
   const api = createApiClient();
 
   useEffect(() => {
@@ -39,34 +38,29 @@ export default function EventsSection() {
     setCurrentIndex((prev) => (prev === events.length - 1 ? 0 : prev + 1));
   };
 
-  const handleRemindMe = async () => {
+  const handleSaveToGoogleCalendar = () => {
     const currentEvent = events[currentIndex];
-    try {
-      const event = {
-        summary: currentEvent.title,
-        description: currentEvent.description,
-        location: currentEvent.venue,
-        start: {
-          dateTime: new Date(currentEvent.date + "T" + currentEvent.time).toISOString(),
-          timeZone: "UTC",
-        },
-        end: {
-          dateTime: new Date(new Date(currentEvent.date + "T" + currentEvent.time).getTime() + 3600000).toISOString(), // 1-hour event
-          timeZone: "UTC",
-        },
-      };
+    const startDateTime = new Date(currentEvent.date + "T" + currentEvent.time)
+      .toISOString()
+      .replace(/[-:]/g, "")
+      .split(".")[0] + "Z"; // ISO format for Google Calendar
+    const endDateTime = new Date(
+      new Date(currentEvent.date + "T" + currentEvent.time).getTime() +
+        60 * 60 * 1000 // Adds 1 hour
+    )
+      .toISOString()
+      .replace(/[-:]/g, "")
+      .split(".")[0] + "Z";
 
-      // Assuming you have an API for Google Calendar integration
-      await api.post("/google-calendar/events", event, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
+    const calendarUrl = `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${encodeURIComponent(
+      currentEvent.title
+    )}&details=${encodeURIComponent(
+      currentEvent.description
+    )}&location=${encodeURIComponent(
+      currentEvent.venue
+    )}&dates=${startDateTime}/${endDateTime}`;
 
-      alert("Event has been added to your Google Calendar!");
-    } catch (err) {
-      alert("Failed to add event to Google Calendar. Please try again.");
-    }
+    window.open(calendarUrl, "_blank");
   };
 
   if (loading) {
@@ -105,7 +99,7 @@ export default function EventsSection() {
             />
           </div>
 
-          <div className="flex flex-col gap-4">
+          <div className="flex flex-col gap-4 text-center">
             <h3 className="text-2xl font-semibold">{currentEvent.title}</h3>
             <p>{currentEvent.description}</p>
             <p>Venue: {currentEvent.venue}</p>
@@ -124,7 +118,7 @@ export default function EventsSection() {
             </button>
 
             <button
-              onClick={handleRemindMe}
+              onClick={handleSaveToGoogleCalendar}
               className="inline-block bg-black text-yellow-500 py-2 px-6 rounded-lg font-semibold text-lg md:text-2xl"
             >
               REMIND ME
