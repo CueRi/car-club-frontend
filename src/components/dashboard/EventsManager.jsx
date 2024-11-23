@@ -66,6 +66,7 @@ export default function EventsManager() {
         title: formData.title,
         description: formData.description,
         date: formData.date,
+        time: formData.time,
         venue: formData.venue,
         image: formData.image,
       };

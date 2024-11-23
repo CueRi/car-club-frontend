@@ -79,6 +79,7 @@ export default function EventsSection() {
           <h3 className="text-2xl font-semibold">{currentEvent.title}</h3>
           <p>{currentEvent.description}</p>
           <p>{currentEvent.venue}</p>
+          <p>{currentEvent.time}</p>
           <p className="text-yellow-500 font-bold">
             {formatDate(currentEvent.date)}
           </p>
