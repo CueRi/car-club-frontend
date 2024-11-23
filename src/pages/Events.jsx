@@ -52,6 +52,8 @@ export default function EventsSection() {
     window.open(calendarUrl, "_blank");
   };
 
+  const isPastEvent = (date) => new Date(date) < new Date();
+
   if (loading) {
     return <div>Loading events...</div>;
   }
@@ -99,12 +101,19 @@ export default function EventsSection() {
                 <p>Date: {formatDate(event.date)}</p>
               </div>
 
-              <button
-                onClick={() => handleSaveToGoogleCalendar(event)}
-                className="mt-4 inline-block bg-black text-yellow-500 py-2 px-6 rounded-lg font-semibold text-lg"
-              >
-                REMIND ME
-              </button>
+              <div className="mt-auto">
+                <button
+                  onClick={() => handleSaveToGoogleCalendar(event)}
+                  disabled={isPastEvent(event.date)}
+                  className={`mt-4 inline-block py-2 px-6 rounded-lg font-semibold text-lg ${
+                    isPastEvent(event.date)
+                      ? "bg-gray-400 text-gray-700 cursor-not-allowed"
+                      : "bg-black text-yellow-500"
+                  }`}
+                >
+                  {isPastEvent(event.date) ? "EVENT PASSED" : "REMIND ME"}
+                </button>
+              </div>
             </div>
           ))}
         </div>
