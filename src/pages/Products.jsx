@@ -68,7 +68,7 @@ export default function Products() {
     <main className="min-h-screen bg-black">
       <section className="py-10 md:py-20">
         <div className="container mx-auto px-4">
-          <h2 className="text-3xl md:text-5xl lg:text-8xl font-bold text-yellow-500 mb-6 md:mb-10 font-[Antonio]">
+          <h2 className="text-4xl md:text-8xl font-bold text-yellow-500 mb-10 font-[Antonio]">
             PRODUCTS
           </h2>
 
