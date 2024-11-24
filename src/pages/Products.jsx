@@ -6,12 +6,12 @@ import { createApiClient, handleApiError } from "../utils/apiUtils";
 // ProductCard Component
 const ProductCard = ({ product }) => (
   <div className="bg-white text-black p-4 md:p-6 rounded-lg flex flex-col items-center transform transition-transform duration-300 hover:scale-105 hover:shadow-xl">
-    {/* Fixed-size image container */}
-    <div className="w-full h-64 overflow-hidden rounded-lg">
+    {/* Fixed-size image container with `object-contain` */}
+    <div className="w-full h-64 overflow-hidden rounded-lg flex justify-center items-center">
       <img
         src={product.image}
         alt={product.name}
-        className="w-full h-full object-cover"
+        className="w-full h-full object-contain"
       />
     </div>
 
@@ -30,7 +30,6 @@ const ProductCard = ({ product }) => (
     </button>
   </div>
 );
-
 
 ProductCard.propTypes = {
   product: PropTypes.shape({
