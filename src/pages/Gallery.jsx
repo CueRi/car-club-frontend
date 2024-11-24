@@ -7,6 +7,7 @@ export default function Gallery() {
   const [galleryData, setGalleryData] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [selectedImage, setSelectedImage] = useState(null); // For full-size image view
   const api = createApiClient();
 
   useEffect(() => {
@@ -24,6 +25,8 @@ export default function Gallery() {
 
     fetchGallery();
   }, [api]);
+
+  const closeModal = () => setSelectedImage(null);
 
   return (
     <main className="min-h-screen bg-black">
@@ -69,7 +72,8 @@ export default function Gallery() {
                         <img
                           src={imageUrl}
                           alt={`${event.event} - Image ${imageIndex + 1}`}
-                          className="w-full h-[150px] sm:h-[200px] lg:h-[250px] object-cover rounded-lg transition-all duration-300 hover:scale-105"
+                          className="w-full h-[150px] sm:h-[200px] lg:h-[250px] object-cover rounded-lg transition-all duration-300 hover:scale-105 cursor-pointer"
+                          onClick={() => setSelectedImage(imageUrl)} // Open modal
                         />
                       </div>
                     ))}
@@ -80,6 +84,28 @@ export default function Gallery() {
           )}
         </div>
       </section>
+
+      {/* Modal for full-size image */}
+      {selectedImage && (
+        <div
+          className="fixed inset-0 bg-black bg-opacity-80 flex items-center justify-center z-50"
+          onClick={closeModal}
+        >
+          <div className="relative max-w-3xl w-full p-4">
+            <img
+              src={selectedImage}
+              alt="Full-size view"
+              className="w-full h-auto rounded-lg"
+            />
+            <button
+              className="absolute top-2 right-2 text-white text-2xl font-bold"
+              onClick={closeModal}
+            >
+              ×
+            </button>
+          </div>
+        </div>
+      )}
     </main>
   );
 }
