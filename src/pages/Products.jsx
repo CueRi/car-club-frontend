@@ -6,7 +6,8 @@ import { createApiClient, handleApiError } from "../utils/apiUtils";
 // ProductCard Component
 const ProductCard = ({ product }) => (
   <div className="bg-white text-black p-4 md:p-6 rounded-lg flex flex-col items-center transform transition-transform duration-300 hover:scale-105 hover:shadow-xl">
-    <div className="w-full h-48 md:h-64 mb-4 overflow-hidden rounded-lg">
+    {/* Fixed-size image container */}
+    <div className="w-full h-64 overflow-hidden rounded-lg">
       <img
         src={product.image}
         alt={product.name}
@@ -14,10 +15,10 @@ const ProductCard = ({ product }) => (
       />
     </div>
 
-    <h3 className="text-xl md:text-2xl font-bold text-yellow-500 mb-2 text-center">
+    <h3 className="text-xl md:text-2xl font-bold text-yellow-500 mt-4 text-center">
       {product.name}
     </h3>
-    <p className="text-lg md:text-xl mb-4 font-semibold">RM{product.price}</p>
+    <p className="text-lg md:text-xl my-4 font-semibold">RM{product.price}</p>
 
     <button
       onClick={() => (window.location.href = product.orderLink)}
@@ -29,6 +30,7 @@ const ProductCard = ({ product }) => (
     </button>
   </div>
 );
+
 
 ProductCard.propTypes = {
   product: PropTypes.shape({
@@ -67,7 +69,7 @@ export default function Products() {
     <main className="min-h-screen bg-black">
       <section className="py-10 md:py-20">
         <div className="container mx-auto px-4">
-          <h2 className="text-3xl md:text-5xl lg:text-8xl font-bold text-yellow-500 mb-6 md:mb-10 font-[Antonio] text-center">
+          <h2 className="text-3xl md:text-5xl lg:text-8xl font-bold text-yellow-500 mb-6 md:mb-10 font-[Antonio]">
             PRODUCTS
           </h2>
 
