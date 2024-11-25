@@ -46,7 +46,10 @@ const NewsPage = () => {
       try {
         const response = await api.get("/news");
         if (Array.isArray(response.data)) {
-          setNews(response.data);
+          const sortedNews = response.data.sort(
+            (a, b) => new Date(b.date) - new Date(a.date) // Sort descending by date
+          );
+          setNews(sortedNews);
         } else {
           setError("Unexpected data format");
         }
