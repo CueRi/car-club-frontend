@@ -20,7 +20,7 @@ export default function EventsSection() {
         });
 
         const sortedEvents = response.data.sort(
-          (a, b) => new Date(b.date) - new Date(a.date) // Sort descending by date
+          (a, b) => new Date(b.date) - new Date(a.date) 
         );
         setEvents(sortedEvents);
         setLoading(false);
@@ -37,9 +37,9 @@ export default function EventsSection() {
     const startDateTime = new Date(event.date)
       .toISOString()
       .replace(/[-:]/g, "")
-      .split(".")[0] + "Z"; // ISO format for Google Calendar
+      .split(".")[0] + "Z"; 
     const endDateTime = new Date(
-      new Date(event.date).getTime() + 60 * 60 * 1000 // Adds 1 hour
+      new Date(event.date).getTime() + 60 * 60 * 1000 
     )
       .toISOString()
       .replace(/[-:]/g, "")

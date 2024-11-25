@@ -69,7 +69,7 @@ export default function Navbar() {
                   NEWS
                 </Link>
                 <a
-                  href="https://docs.google.com/forms"
+                  href="https://forms.gle/yvKCB6D7x2Mj6ffh9"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="block px-4 py-2 hover:text-yellow-500"
