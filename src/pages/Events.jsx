@@ -18,7 +18,11 @@ export default function EventsSection() {
             Authorization: `Bearer ${token}`,
           },
         });
-        setEvents(response.data);
+
+        const sortedEvents = response.data.sort(
+          (a, b) => new Date(b.date) - new Date(a.date) // Sort descending by date
+        );
+        setEvents(sortedEvents);
         setLoading(false);
       } catch (err) {
         setError(handleApiError(err));
