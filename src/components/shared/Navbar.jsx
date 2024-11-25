@@ -1,12 +1,12 @@
 import { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Menu, X } from "lucide-react";
- 
+
 export default function Navbar() {
   const navigate = useNavigate();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
- 
+
   useEffect(() => {
     const checkAuth = () => {
       const token = localStorage.getItem("token");
@@ -18,14 +18,14 @@ export default function Navbar() {
       window.removeEventListener("storage", checkAuth);
     };
   }, []);
- 
+
   const handleLogout = () => {
     localStorage.removeItem("token");
     setIsAuthenticated(false);
     navigate("/login");
     setIsMenuOpen(false);
   };
- 
+
   return (
     <header className="bg-black text-white py-4">
       <div className="container mx-auto flex justify-between items-center px-4">
@@ -36,7 +36,7 @@ export default function Navbar() {
             className="w-12 h-12 md:w-16 md:h-16"
           />
         </Link>
- 
+
         <button
           className="md:hidden block z-50"
           onClick={() => setIsMenuOpen(!isMenuOpen)}
@@ -44,7 +44,7 @@ export default function Navbar() {
         >
           {isMenuOpen ? "" : <Menu size={24} />}
         </button>
- 
+
         <nav className="hidden md:flex space-x-8 text-lg md:text-2xl">
           <Link to="/about" className="hover:text-yellow-500">
             WHO?
@@ -82,7 +82,7 @@ export default function Navbar() {
                 >
                   CONTACT US
                 </Link>
-                {isAuthenticated ? (
+                {isAuthenticated && (
                   <>
                     <Link
                       to="/admin"
@@ -97,19 +97,12 @@ export default function Navbar() {
                       LOGOUT
                     </button>
                   </>
-                ) : (
-                  <Link
-                    to="/login"
-                    className="block px-4 py-2 hover:text-yellow-500"
-                  >
-                    ADMIN LOGIN
-                  </Link>
                 )}
               </div>
             </div>
           </div>
         </nav>
- 
+
         {isMenuOpen && (
           <div className="fixed inset-0 bg-black bg-opacity-90 z-40 flex flex-col items-center justify-center space-y-6 text-xl text-center">
             <button
@@ -170,7 +163,7 @@ export default function Navbar() {
             >
               CONTACT US
             </Link>
-            {isAuthenticated ? (
+            {isAuthenticated && (
               <>
                 <Link
                   to="/admin"
@@ -186,14 +179,6 @@ export default function Navbar() {
                   LOGOUT
                 </button>
               </>
-            ) : (
-              <Link
-                to="/login"
-                onClick={() => setIsMenuOpen(false)}
-                className="hover:text-yellow-500"
-              >
-                ADMIN LOGIN
-              </Link>
             )}
           </div>
         )}
