@@ -79,7 +79,7 @@ export default function EventsSection() {
       />
 
       <div className="container mx-auto relative z-10 px-4">
-        <h2 className="text-4xl md:text-8xl font-bold mb-10 text-yellow-500 text-center">
+        <h2 className="text-4xl md:text-8xl font-bold mb-10 text-yellow-500">
           LATEST HAPPENINGS
         </h2>
 
@@ -97,12 +97,12 @@ export default function EventsSection() {
                 />
               </div>
 
-              <div className="flex flex-col gap-4 text-center">
+              <div className="flex flex-col gap-4">
                 <h3 className="text-2xl text-yellow-500 font-semibold">{event.title}</h3>
-                <p>{event.description}</p>
-                <p>Venue: {event.venue}</p>
-                <p>Time: {event.time}</p>
-                <p>Date: {formatDate(event.date)}</p>
+                <p className="text-center">{event.description}</p>
+                <p className="text-yellow-500 font-semibold">Venue: {event.venue}</p>
+                <p className="text-yellow-500 font-semibold">Time: {event.time}</p>
+                <p className="text-yellow-500 font-semibold">Date: {formatDate(event.date)}</p>
               </div>
 
               <div className="mt-auto">
