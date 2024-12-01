@@ -145,7 +145,7 @@ export default function GalleryManager() {
             onChange={(e) =>
               setFormData({ ...formData, description: e.target.value })
             }
-            required
+            
           />
 
           <div className="md:col-span-2 space-y-2">

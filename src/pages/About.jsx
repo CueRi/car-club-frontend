@@ -88,7 +88,7 @@ export default function About() {
       {/* Meet the Team Section */}
       <section className="py-20 bg-black">
         <div className="container mx-auto px-4">
-          <h2 className="text-4xl md:text-8xl font-bold text-yellow-500 mb-10 font-[Antonio] text-center">
+          <h2 className="text-4xl md:text-8xl font-bold text-yellow-500 mb-10 font-[Antonio]">
             MEET THE TEAM
           </h2>
 
