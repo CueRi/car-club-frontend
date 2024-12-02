@@ -20,7 +20,7 @@ export default function EventsSection() {
         });
 
         const sortedEvents = response.data.sort(
-          (a, b) => new Date(b.date) - new Date(a.date) 
+          (a, b) => new Date(b.date) - new Date(a.date)
         );
         setEvents(sortedEvents);
         setLoading(false);
@@ -37,9 +37,9 @@ export default function EventsSection() {
     const startDateTime = new Date(event.date)
       .toISOString()
       .replace(/[-:]/g, "")
-      .split(".")[0] + "Z"; 
+      .split(".")[0] + "Z";
     const endDateTime = new Date(
-      new Date(event.date).getTime() + 60 * 60 * 1000 
+      new Date(event.date).getTime() + 60 * 60 * 1000
     )
       .toISOString()
       .replace(/[-:]/g, "")
@@ -79,46 +79,45 @@ export default function EventsSection() {
       />
 
       <div className="container mx-auto relative z-10 px-4">
-        <h2 className="text-4xl md:text-8xl font-bold mb-10 text-yellow-500">
+        <h2 className="text-4xl md:text-8xl font-bold mb-10 text-yellow-500 text-center">
           LATEST HAPPENINGS
         </h2>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+        <div className="flex flex-col gap-8">
           {events.map((event) => (
             <div
-            key={event.id}
-            className="bg-gray-500 bg-opacity-75 p-6 md:p-8 rounded-lg shadow-md flex flex-col lg:flex-row items-center gap-8"
-          >
-            <div className="relative w-full lg:w-1/3 max-w-sm mx-auto">
-              <img
-                src={event.image}
-                alt={event.title}
-                className="w-full h-full object-cover rounded-lg aspect-square"
-              />
-            </div>
-          
-            <div className="flex flex-col gap-4 lg:w-2/3">
-              <h3 className="text-2xl text-yellow-500 font-semibold">{event.title}</h3>
-              <p className="">{event.description}</p>
-              <p className="text-yellow-500 font-semibold">Venue: {event.venue}</p>
-              <p className="text-yellow-500 font-semibold">Time: {event.time}</p>
-              <p className="text-yellow-500 font-semibold">Date: {formatDate(event.date)}</p>
-              <div className="mt-auto">
-                <button
-                  onClick={() => handleSaveToGoogleCalendar(event)}
-                  disabled={isPastEvent(event.date)}
-                  className={`mt-4 inline-block py-2 px-6 rounded-lg font-semibold text-lg ${
-                    isPastEvent(event.date)
-                      ? "bg-gray-400 text-gray-700 cursor-not-allowed"
-                      : "bg-black text-yellow-500"
-                  }`}
-                >
-                  {isPastEvent(event.date) ? "EVENT PASSED" : "REMIND ME"}
-                </button>
+              key={event.id}
+              className="bg-gray-500 bg-opacity-75 p-8 rounded-lg shadow-md flex flex-col lg:flex-row items-center gap-8"
+            >
+              <div className="relative w-full lg:w-1/3 max-w-sm">
+                <img
+                  src={event.image}
+                  alt={event.title}
+                  className="w-full h-full object-cover rounded-lg"
+                />
+              </div>
+
+              <div className="flex flex-col gap-4 lg:w-2/3">
+                <h3 className="text-2xl text-yellow-500 font-semibold">{event.title}</h3>
+                <p>{event.description}</p>
+                <p className="text-yellow-500 font-semibold">Venue: {event.venue}</p>
+                <p className="text-yellow-500 font-semibold">Time: {event.time}</p>
+                <p className="text-yellow-500 font-semibold">Date: {formatDate(event.date)}</p>
+                <div className="mt-4">
+                  <button
+                    onClick={() => handleSaveToGoogleCalendar(event)}
+                    disabled={isPastEvent(event.date)}
+                    className={`py-2 px-6 rounded-lg font-semibold text-lg ${
+                      isPastEvent(event.date)
+                        ? "bg-gray-400 text-gray-700 cursor-not-allowed"
+                        : "bg-black text-yellow-500"
+                    }`}
+                  >
+                    {isPastEvent(event.date) ? "EVENT PASSED" : "REMIND ME"}
+                  </button>
+                </div>
               </div>
             </div>
-          </div>
-          
           ))}
         </div>
       </div>
