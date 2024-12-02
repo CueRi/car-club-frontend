@@ -86,25 +86,23 @@ export default function EventsSection() {
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
           {events.map((event) => (
             <div
-              key={event.id}
-              className="bg-gray-500 bg-opacity-75 p-6 md:p-8 rounded-lg shadow-md flex flex-col items-center"
-            >
-              <div className="relative w-full max-w-sm mx-auto mb-4">
-                <img
-                  src={event.image}
-                  alt={event.title}
-                  className="w-full h-full object-cover rounded-lg aspect-square"
-                />
-              </div>
-
-              <div className="flex flex-col gap-4">
-                <h3 className="text-2xl text-yellow-500 font-semibold">{event.title}</h3>
-                <p className="">{event.description}</p>
-                <p className="text-yellow-500 font-semibold">Venue: {event.venue}</p>
-                <p className="text-yellow-500 font-semibold">Time: {event.time}</p>
-                <p className="text-yellow-500 font-semibold">Date: {formatDate(event.date)}</p>
-              </div>
-
+            key={event.id}
+            className="bg-gray-500 bg-opacity-75 p-6 md:p-8 rounded-lg shadow-md flex flex-col lg:flex-row items-center gap-8"
+          >
+            <div className="relative w-full lg:w-1/3 max-w-sm mx-auto">
+              <img
+                src={event.image}
+                alt={event.title}
+                className="w-full h-full object-cover rounded-lg aspect-square"
+              />
+            </div>
+          
+            <div className="flex flex-col gap-4 lg:w-2/3">
+              <h3 className="text-2xl text-yellow-500 font-semibold">{event.title}</h3>
+              <p className="">{event.description}</p>
+              <p className="text-yellow-500 font-semibold">Venue: {event.venue}</p>
+              <p className="text-yellow-500 font-semibold">Time: {event.time}</p>
+              <p className="text-yellow-500 font-semibold">Date: {formatDate(event.date)}</p>
               <div className="mt-auto">
                 <button
                   onClick={() => handleSaveToGoogleCalendar(event)}
@@ -119,6 +117,8 @@ export default function EventsSection() {
                 </button>
               </div>
             </div>
+          </div>
+          
           ))}
         </div>
       </div>
