@@ -72,14 +72,10 @@ export default function EventsSection() {
 
   return (
     <section className="relative bg-black text-white py-16 min-h-screen flex items-center justify-center overflow-hidden">
-      <img
-        src="/images/background/events.jpg"
-        alt="Events Background"
-        className="absolute inset-0 w-full h-full object-cover opacity-40"
-      />
+      
 
       <div className="container mx-auto relative z-10 px-4">
-        <h2 className="text-4xl md:text-8xl font-bold mb-10 text-yellow-500 text-center">
+        <h2 className="text-4xl md:text-8xl font-bold mb-10 text-yellow-500">
           LATEST HAPPENINGS
         </h2>
 
