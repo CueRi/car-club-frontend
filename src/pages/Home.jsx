@@ -148,10 +148,6 @@ export default function Home() {
                   {carOfTheMonth.title}
                 </h3>
 
-                <p className="text-lg text-center text-gray-300 mb-6 leading-relaxed">
-                  {carOfTheMonth.description}
-                </p>
-
                 <p className="text-md text-center text-yellow-500 font-medium mb-6">
                   {formatDate(carOfTheMonth.date)}
                 </p>
