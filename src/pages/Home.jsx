@@ -16,7 +16,11 @@ export default function Home() {
       try {
         const response = await api.get("/events");
         if (Array.isArray(response.data)) {
-          setEvents(response.data);
+          // Sort events by date in descending order
+          const sortedEvents = response.data.sort(
+            (a, b) => new Date(b.date) - new Date(a.date)
+          );
+          setEvents(sortedEvents);
         } else {
           setError("Unexpected data format");
         }
@@ -147,6 +151,10 @@ export default function Home() {
                 <h3 className="text-3xl font-bold text-center text-yellow-400 mb-4">
                   {carOfTheMonth.title}
                 </h3>
+
+                <p className="text-lg text-center text-gray-300 mb-6 leading-relaxed">
+                  {carOfTheMonth.description}
+                </p>
 
                 <p className="text-md text-center text-yellow-500 font-medium mb-6">
                   {formatDate(carOfTheMonth.date)}
