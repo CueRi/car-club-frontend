@@ -47,7 +47,7 @@ const NewsPage = () => {
         const response = await api.get("/news");
         if (Array.isArray(response.data)) {
           const sortedNews = response.data.sort(
-            (a, b) => new Date(b.date) - new Date(a.date) // Sort descending by date
+            (a, b) => new Date(b.date) - new Date(a.date) 
           );
           setNews(sortedNews);
         } else {

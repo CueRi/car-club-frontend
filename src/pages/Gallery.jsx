@@ -7,7 +7,7 @@ export default function Gallery() {
   const [galleryData, setGalleryData] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [selectedImage, setSelectedImage] = useState(null); // For full-size image view
+  const [selectedImage, setSelectedImage] = useState(null); 
   const api = createApiClient();
 
   useEffect(() => {
@@ -73,7 +73,7 @@ export default function Gallery() {
                           src={imageUrl}
                           alt={`${event.event} - Image ${imageIndex + 1}`}
                           className="w-full h-[150px] sm:h-[200px] lg:h-[250px] object-cover rounded-lg transition-all duration-300 hover:scale-105 cursor-pointer"
-                          onClick={() => setSelectedImage(imageUrl)} // Open modal
+                          onClick={() => setSelectedImage(imageUrl)} 
                         />
                       </div>
                     ))}
